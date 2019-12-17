@@ -1,0 +1,17 @@
+{
+    "name": "Devjobs",
+    "version": "1.0.0",
+    "description": "List latest available web developer jobs",
+    "main": "server.js",
+    "scripts": {
+        "start": "nodemon server.js"
+    },
+    "dependencies": {
+        "dotenv": "^8.1.0",
+        "express": "^4.16.3",
+        "axios": "^0.19.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.19.1"
+    }
+}
