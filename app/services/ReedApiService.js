@@ -15,23 +15,42 @@ class ReedApiService
 		};
 	}
 
-	async getJobs()
+	async getJobs(params)
 	{
-		let employerId = 0,
-			keywords = 'web developer',
-			location = 'birmingham',
-			distanceFromLocation = '15';
+		let urlParams = '';
 
-		let params = `keywords=${keywords}&` +
-					 `location=${location}&` +
-					 `distancefromlocation=${distanceFromLocation}`;
+		for (let key in params) {
+			if (urlParams) urlParams += '&';
 
-		if (employerId > 0) {
-			params +=  `&employerid=${employerId}`;
+			urlParams += `${key}=${params[key]}`;
 		}
-		let url = `/search?${params}`;
 
-		let result = null;
+		let url = `/search?${urlParams}`,
+			result = null;
+
+		console.log('url: '+ url);
+
+		try {
+			let response = await axios.get(
+				url,
+				this.getApiConfig()
+			);
+
+			result = response.data;
+		} catch (error) {
+			console.log("error", error);
+		}
+
+	    return result;
+	}
+
+
+	async getJob(id)
+	{
+		let url = `/jobs/${id}`,
+			result = null;
+
+		console.log('url: '+ url);
 
 		try {
 			let response = await axios.get(
