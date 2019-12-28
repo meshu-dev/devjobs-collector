@@ -1,17 +1,22 @@
-require('dotenv').config();
 
 const axios = require('axios');
 
 class ReedApiService
 {
+    constructor(apiUrl, apiKey)
+    {
+    	this.apiUrl = apiUrl;
+        this.apiKey = apiKey;
+    }
+
 	getApiConfig()
 	{
 		return {
 			auth: {
-			    username: process.env.REED_API_KEY, //'23291af6-195e-4e90-bb15-de9a8c2c2193',
+			    username: this.apiKey, //'23291af6-195e-4e90-bb15-de9a8c2c2193',
 			    password: ''
 			},
-			baseURL: process.env.REED_API_URL // 'https://www.reed.co.uk/api/1.0'
+			baseURL: this.apiUrl // 'https://www.reed.co.uk/api/1.0'
 		};
 	}
 
@@ -41,7 +46,7 @@ class ReedApiService
 			console.log("error", error);
 		}
 
-	    return result;
+	    return result || null;
 	}
 
 
@@ -67,4 +72,4 @@ class ReedApiService
 	}
 }
 
-module.exports = ReedApiService
+module.exports = ReedApiService;
