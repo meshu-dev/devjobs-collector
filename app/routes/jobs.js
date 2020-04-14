@@ -24,7 +24,8 @@ let reedApiService = new ReedApiService(
 let jobService = new ReedJobService(
 	devJobsApiService,
 	reedApiService,
-	timeHelper
+	timeHelper,
+	process.env.JOBS_PER_PAGE
 );
 
 let jobController = new JobController(jobService);

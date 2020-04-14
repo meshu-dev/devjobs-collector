@@ -3,22 +3,24 @@ class ReedJobService
     constructor(
     	devJobsApiService,
     	reedApiService,
-    	timeHelper
+    	timeHelper,
+    	resultsPerRequest
     ) {
     	this.devJobsApiService = devJobsApiService;
         this.reedApiService = reedApiService;
         this.timeHelper = timeHelper;
+        this.resultsPerRequest = resultsPerRequest;
         this.isLoggedIn = false;
     }
 
 	async login()
 	{
 		if (this.isLoggedIn === false) {
-			await this.devJobsApiService.login();
+			await this.devJobsApiService.login()
 		}
 	}
 
-    async addJobs(jobSiteId, reedJobsResult)
+    async addJobs(jobSite, reedJobsResult)
     {
 		let newJobIds      = [],
 			reedJobs       = reedJobsResult['results'],
@@ -26,13 +28,24 @@ class ReedJobService
 
 		if (reedJobs.length > 0) {
 			for (let reedJob of reedJobs) {
-				reedJob['jobSiteId'] = jobSiteId;
-			 	
-			 	let result = await this.devJobsApiService.addJob(reedJob);
+				const jobId = reedJob['jobId'] || null
 
-			 	if (result && result['id']) {
-			 		newJobIds.push(result['jobId']);
-			 	}
+				if (jobId) {
+					let reedJobResult = await this.reedApiService.getJob(
+						jobId
+					)
+				 	reedJobResult['jobSiteId'] = jobSite['id']
+				 	reedJobResult['thumb'] = jobSite['logo']
+				 	reedJobResult['date'] = reedJobResult['datePosted']
+
+				 	const result = await this.devJobsApiService.addJob(
+				 		reedJobResult
+				 	)
+				 	if (result && result['id']) {
+				 		newJobIds.push(result['jobId'])
+				 	}
+					this.timeHelper.wait(2)
+				}
 			}
 		}
 		return newJobIds;
@@ -45,48 +58,56 @@ class ReedJobService
 
 		let jobIds = [],
 			hasJobs = true,
-			params = this.prepareSearchParams(jobSite);
+			jobSearches = this.prepareSearchParams(jobSite)
+
+		for (const jobSearch of jobSearches) {
+			const newJobIds = await this.runJobSearch(jobSite, jobSearch)
+			jobIds = jobIds.concat(newJobIds)
+		}
+
+	    return jobIds 
+	}
+
+	async runJobSearch(jobSite, searchParams)
+	{
+		let jobIds = [],
+			hasJobs = true
 
 		do {
-			let reedJobsResult = await this.reedApiService.getJobs(params);
+			let reedJobsResult = await this.reedApiService.getJobs(searchParams)
+			
+			this.timeHelper.wait(2)
 
 			if (reedJobsResult && reedJobsResult['results']) {
-				let newJobIds = await this.addJobs(jobSite['id'], reedJobsResult);
+				let newJobIds = await this.addJobs(jobSite, reedJobsResult)
 
 				if (newJobIds.length > 0) {
-					jobIds = jobIds.concat(newJobIds);
+					jobIds = jobIds.concat(newJobIds)
 				}
-				params['resultsToSkip'] += reedJobsResult['results'].length;
+				searchParams['resultsToSkip'] += reedJobsResult['results'].length
 
-				this.timeHelper.wait(5);
-
-				if (params['resultsToSkip'] > 2) hasJobs = false;  // Test
+				if (!reedJobsResult || reedJobsResult['results'].length === 0) {
+					hasJobs = false  // Test
+				}
 			} else {
-				hasJobs = false;
+				hasJobs = false
 			}
-		} while (hasJobs === true);
+		} while (hasJobs === true)
 
-	    return jobIds;
+		return jobIds
 	}
 
     prepareSearchParams(jobSite)
     {
-		let params = [];
+		let jobSearches = jobSite['searchParams'] || null
 
-		params['resultsToTake'] = 2;
-		params['resultsToSkip'] = 0;
-
-		if (jobSite['searchParams']) {
-			for (let key in jobSite['searchParams']) {
-				let value = jobSite['searchParams'][key];
-
-				if (Array.isArray(value) === true) {
-					value = value[0];
-				}
-				params[key] = value;
+		if (jobSearches) {
+			for (let key in jobSearches) {
+				jobSearches[key]['resultsToTake'] = this.resultsPerRequest
+				jobSearches[key]['resultsToSkip'] = 0
 			}
 		}
-		return params;
+		return jobSearches
     }
 }
 

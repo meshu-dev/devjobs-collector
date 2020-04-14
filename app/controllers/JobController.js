@@ -9,12 +9,10 @@ class JobController
 	{
 		let newJobIds = await this.reedJobService.retrieveNewJobs();
 
-		res.json([
-			{
-				jobSite: 'Reed',
-				newJobIds: newJobIds
-			}
-		]);
+		res.json({
+			jobSite: 'Reed',
+			newJobIds: newJobIds
+		}); 
 	}
 
 	async cleanUp(req, res)
