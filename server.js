@@ -1,6 +1,14 @@
 'use strict';
 
-require('dotenv').config();
+let envFilename = '.env'
+
+if (process.env.NODE_ENV !== 'development') {
+  envFilename = `.env.${process.env.NODE_ENV}`
+}
+
+console.log(`envFilename: ${envFilename}`);
+
+require('dotenv').config({ path: envFilename });
 
 let express    = require('express'),
 	app        = express(),

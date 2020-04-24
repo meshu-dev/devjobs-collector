@@ -37,6 +37,7 @@ class ReedJobService
 				 	reedJobResult['jobSiteId'] = jobSite['id']
 				 	reedJobResult['thumb'] = jobSite['logo']
 				 	reedJobResult['date'] = reedJobResult['datePosted']
+				 	reedJobResult['isFavourited'] = false
 
 				 	const result = await this.devJobsApiService.addJob(
 				 		reedJobResult
