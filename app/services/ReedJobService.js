@@ -61,11 +61,12 @@ class ReedJobService
 			hasJobs = true,
 			jobSearches = this.prepareSearchParams(jobSite)
 
-		for (const jobSearch of jobSearches) {
-			const newJobIds = await this.runJobSearch(jobSite, jobSearch)
-			jobIds = jobIds.concat(newJobIds)
+		if (jobSearches) {
+			for (const jobSearch of jobSearches) {
+				const newJobIds = await this.runJobSearch(jobSite, jobSearch)
+				jobIds = jobIds.concat(newJobIds)
+			}
 		}
-
 	    return jobIds 
 	}
 
