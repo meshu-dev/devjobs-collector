@@ -35,7 +35,7 @@ class ReedJobService
 						jobId
 					)
 				 	reedJobResult['jobSiteId'] = jobSite['id']
-				 	reedJobResult['thumb'] = jobSite['logo']
+				 	reedJobResult['thumb'] = jobSite['thumb']
 				 	reedJobResult['date'] = reedJobResult['datePosted']
 				 	reedJobResult['isFavourited'] = false
 
