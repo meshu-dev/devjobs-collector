@@ -5,7 +5,8 @@
     "main": "server.js",
     "scripts": {
         "start": "nodemon server.js",
-        "start:test": "NODE_ENV=test node server.js"
+        "start:test": "NODE_ENV=test node server.js",
+        "start:production": "NODE_ENV=production node server.js"
     },
     "dependencies": {
         "dotenv": "^8.1.0",
