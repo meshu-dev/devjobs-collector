@@ -14,7 +14,7 @@ sudo apt-get install -y nodejs
 brew install node
 ```
 ### Dev Jobs API
-Go to https://github.com/meshu-dev/devjobs-api then follow install and setup instructions
+- Go to https://github.com/meshu-dev/devjobs-api then follow install and setup instructions
 
 ## Setup 
 - Install npm packages
