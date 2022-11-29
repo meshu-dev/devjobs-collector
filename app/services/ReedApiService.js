@@ -43,7 +43,7 @@ class ReedApiService
 
       result = response.data;
     } catch (error) {
-      console.log("error", error);
+      console.log("error", error.message);
     }
 
     return result || null;
@@ -65,7 +65,7 @@ class ReedApiService
 
       result = response.data;
     } catch (error) {
-      console.log("error", error);
+      console.log("error", error.message);
     }
 
     return result;

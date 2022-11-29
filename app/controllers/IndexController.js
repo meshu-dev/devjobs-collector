@@ -2,7 +2,7 @@ class IndexController
 {
   index(req, res) {
     res.json({
-      status: 'Job collector is fine'
+      status: 'Job collector is running'
     });
   }
 }

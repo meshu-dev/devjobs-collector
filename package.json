@@ -1,22 +1,23 @@
 {
-    "name": "Devjobs",
-    "version": "1.0.0",
-    "description": "List latest available web developer jobs",
-    "main": "server.js",
-    "scripts": {
-        "start": "nodemon server.js",
-        "start:test": "NODE_ENV=test node server.js",
-        "start:production": "NODE_ENV=production node server.js",
-        "lint": "eslint --ext .js --ignore-path .gitignore ."
-    },
-    "dependencies": {
-        "dotenv": "^8.1.0",
-        "express": "^4.16.3",
-        "axios": "^0.19.0"
-    },
-    "devDependencies": {
-        "babel-eslint": "^10.1.0",
-        "eslint": "^7.1.0",
-        "nodemon": "^1.19.1"
-    }
+  "name": "Devjobs",
+  "version": "1.0.0",
+  "description": "List latest available web developer jobs",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "start:test": "NODE_ENV=test node server.js",
+    "start:production": "NODE_ENV=production node server.js",
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "express": "^4.16.3",
+    "axios": "^0.19.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.1.0",
+    "nodemon": "^1.19.1"
+  }
 }

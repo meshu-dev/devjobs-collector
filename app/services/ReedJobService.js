@@ -33,13 +33,33 @@ class ReedJobService
           let reedJobResult = await this.reedApiService.getJob(
             jobId
           );
-          reedJobResult['jobSiteId'] = jobSite['id'];
-          reedJobResult['thumb'] = jobSite['thumb'];
-          reedJobResult['date'] = reedJobResult['datePosted'];
-          reedJobResult['isFavourited'] = false;
+
+          console.log('reedJobResult: ', reedJobResult);
+
+          const datePosted = reedJobResult['datePosted'].split('/');
+          const year = datePosted[2] || null;
+          const month = datePosted[1] || null;
+          const day = datePosted[0] || null;
+
+          let jobDate = null;
+
+          if (year && month && day) {
+            jobDate = `${year}-${month}-${day}`;
+          }
+
+          const params = {
+            jobSiteId: jobSite['id'],
+            params: reedJobResult
+          };
+
+          if (jobDate) {
+            params['date'] = jobDate;
+          }
+
+          console.log('reedJobResult: ', params);
 
           const result = await this.devJobsApiService.addJob(
-            reedJobResult
+            params
           );
 
           if (result && result['id']) {
@@ -101,7 +121,7 @@ class ReedJobService
 
   prepareSearchParams(jobSite)
   {
-    let jobSearches = jobSite['searchParams'] || null;
+    let jobSearches = jobSite && jobSite['searchParams'] || null;
 
     if (jobSearches) {
       for (let key in jobSearches) {

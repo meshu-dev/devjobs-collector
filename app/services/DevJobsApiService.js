@@ -21,7 +21,7 @@ class DevJobsApiService
 
     if (this.token) {
       params['headers'] = {
-        'Authorization': "bearer " + this.token
+        'Authorization': `Bearer ${this.token}`
       };
     }
     return params;
@@ -42,12 +42,14 @@ class DevJobsApiService
       );
       result = response.data;
 
+      console.log('Result', result);
+
       if (result.token) {
         this.token = result.token;
         return true;
       }
     } catch (error) {
-      console.log("error", error);
+      console.log("error", error.message);
     }
     return false;
   }
@@ -70,7 +72,7 @@ class DevJobsApiService
         result = result[0];
       }
     } catch (error) {
-      console.log("error", error);
+      console.log("error", error.message);
     }
 
     return result;
@@ -81,8 +83,7 @@ class DevJobsApiService
     let url = `/job-sites?name=${name}`,
       result = null;
 
-    console.log('this.getApiConfig()');
-    console.log(this.getApiConfig());
+    console.log(`Url: ${url} | API Config: ` + this.getApiConfig());
 
     try {
       let response = await axios.get(
@@ -96,7 +97,7 @@ class DevJobsApiService
         result = result[0];
       }
     } catch (error) {
-      console.log("error", error);
+      console.log(`Error: ${error.message}`);
     }
 
     return result;
