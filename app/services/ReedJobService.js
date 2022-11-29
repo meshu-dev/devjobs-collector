@@ -40,10 +40,12 @@ class ReedJobService
 
           const result = await this.devJobsApiService.addJob(
             reedJobResult
-          )
+          );
+
           if (result && result['id']) {
             newJobIds.push(result['jobId']);
           }
+
           this.timeHelper.wait(2);
         }
       }

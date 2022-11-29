@@ -7,4 +7,4 @@ class IndexController
   }
 }
 
-module.exports = IndexController
+module.exports = IndexController;

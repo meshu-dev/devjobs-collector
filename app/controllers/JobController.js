@@ -34,4 +34,4 @@ class JobController
   }
 }
 
-module.exports = JobController
+module.exports = JobController;

@@ -1,14 +1,6 @@
 'use strict';
 
-let envFilename = '.env';
-
-if (process.env.NODE_ENV !== 'development') {
-  envFilename = `.env.${process.env.NODE_ENV}`;
-}
-
-console.log(`envFilename: ${envFilename}`);
-
-require('dotenv').config({ path: envFilename });
+require('dotenv').config({ path: '.env' });
 
 let express = require('express'),
   app = express(),
@@ -19,10 +11,10 @@ app.use(express.json());
 
 // Create and setup routes
 let routePath = './app/routes',
-  index     = require(routePath + '/index'),
-  jobs      = require(routePath + '/jobs');
+  index = require(routePath + '/index'),
+  jobs = require(routePath + '/jobs');
 
-app.use('/',     index);
+app.use('/', index);
 app.use('/jobs', jobs);
 
 // Start server
