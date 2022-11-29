@@ -78,6 +78,31 @@ class DevJobsApiService
     return result;
   }
 
+  async getJob(jobId, jobSiteId)
+  {
+    let url = `/jobs?jobId=${jobId}&jobSiteId=${jobSiteId}`,
+      result = null;
+
+    console.log(`Url: ${url} | API Config: ` + this.getApiConfig());
+
+    try {
+      let response = await axios.get(
+        url,
+        this.getApiConfig()
+      );
+
+      result = response.data;
+
+      if (result[0]) {
+        result = result[0];
+      }
+    } catch (error) {
+      console.log(`Error: ${error.message}`);
+    }
+
+    return result;
+  }
+
   async getJobSite(name)
   {
     let url = `/job-sites?name=${name}`,
@@ -101,17 +126,6 @@ class DevJobsApiService
     }
 
     return result;
-  }
-
-  getJobSiteData()
-  {
-    let params = {
-      keywords: 'Php developer',
-      locationName: 'Birmingham',
-      distanceFromLocation: '15'
-    };
-
-    return params;
   }
 }
 

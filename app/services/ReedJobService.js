@@ -27,43 +27,43 @@ class ReedJobService
 
     if (reedJobs.length > 0) {
       for (let reedJob of reedJobs) {
-        const jobId = reedJob['jobId'] || null;
+        let jobId = reedJob['jobId'] || null;
 
         if (jobId) {
           let reedJobResult = await this.reedApiService.getJob(
             jobId
           );
 
-          console.log('reedJobResult: ', reedJobResult);
+          jobId = reedJobResult['jobId'];
 
-          const datePosted = reedJobResult['datePosted'].split('/');
-          const year = datePosted[2] || null;
-          const month = datePosted[1] || null;
-          const day = datePosted[0] || null;
-
-          let jobDate = null;
-
-          if (year && month && day) {
-            jobDate = `${year}-${month}-${day}`;
-          }
-
-          const params = {
-            jobSiteId: jobSite['id'],
-            params: reedJobResult
-          };
-
-          if (jobDate) {
-            params['date'] = jobDate;
-          }
-
-          console.log('reedJobResult: ', params);
-
-          const result = await this.devJobsApiService.addJob(
-            params
+          const job = await this.devJobsApiService.getJob(
+            jobId, jobSite['id']
           );
 
-          if (result && result['id']) {
-            newJobIds.push(result['jobId']);
+          if (job == null || job.length == 0) {
+            let jobDate = this.getApiDate(
+              reedJobResult['datePosted']
+            );
+  
+            const params = {
+              jobId: jobId,
+              jobSiteId: jobSite['id'],
+              params: reedJobResult
+            };
+  
+            if (jobDate) {
+              params['date'] = jobDate;
+            }
+  
+            console.log('reedJobResult: ', params);
+  
+            const result = await this.devJobsApiService.addJob(
+              params
+            );
+  
+            if (result && result['id']) {
+              newJobIds.push(result['jobId']);
+            }
           }
 
           this.timeHelper.wait(2);
@@ -130,6 +130,21 @@ class ReedJobService
       }
     }
     return jobSearches;
+  }
+
+  getApiDate(date)
+  {
+    const dateData = date.split('/');
+    const year = dateData[2] || null;
+    const month = dateData[1] || null;
+    const day = dateData[0] || null;
+
+    date = null;
+
+    if (year && month && day) {
+      date = `${year}-${month}-${day}`;
+    }
+    return date;
   }
 }
 
