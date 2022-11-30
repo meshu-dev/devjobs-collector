@@ -1,10 +1,11 @@
 'use strict';
 
-require('dotenv').config({ path: '.env' });
+const path = require('path'); 
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 let express = require('express'),
   app = express(),
-  port = process.env.APP_PORT || 3000;
+  port = process.env.APP_PORT || 3001;
 
 // Parse JSON data in requests
 app.use(express.json());
