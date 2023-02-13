@@ -10,6 +10,7 @@ class JobController
     let newJobIds = await this.reedJobService.retrieveNewJobs();
 
     res.json({
+      dateTime: this.getDateTime(),
       jobSite: 'Reed',
       newJobIds: newJobIds
     }); 
@@ -31,6 +32,26 @@ class JobController
     //res.json(reedJob);
 
     res.json({ a: 'b' });
+  }
+
+  formatNumber(value)
+  {
+    return ("0" + value).slice(-2);
+  }
+  
+  getDateTime()
+  {
+    const dateObj = new Date();
+  
+    let year = dateObj.getFullYear();
+    let month = this.formatNumber(dateObj.getMonth() + 1);
+    let date = this.formatNumber(dateObj.getDate());
+    
+    let hours = this.formatNumber(dateObj.getHours());
+    let minutes = this.formatNumber(dateObj.getMinutes());
+    let seconds = this.formatNumber(dateObj.getSeconds());
+    
+    return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
   }
 }
 
